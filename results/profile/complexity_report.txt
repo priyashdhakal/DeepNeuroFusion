@@ -1,0 +1,60 @@
+========================================================================
+DeepNeuroFusion — Computational Complexity & Profiling Report
+========================================================================
+
+── Hardware & Software ─────────────────────────────────────────────────
+  Platform   : Linux 4.15.0-213-generic
+  CPU        : x86_64  |  40 logical cores
+  RAM        : 755 GB
+  GPU        : NVIDIA GeForce RTX 2080 Ti (10.6 GB VRAM)  [DL training]
+  PyTorch    : 2.6.0+cu124
+  Device     : cuda:0
+
+── Dataset & CV Protocol ────────────────────────────────────────────────
+  Cohort     : ANMerge  (n=318: AD=102, MCI=112, CTL=104)
+  Profiled   : AD_vs_CN  (n=206: train=164, val=42)
+  Full CV    : 10-repeat × 5-fold stratified k-fold (50 splits)
+  MRI feats  : 138
+  Gene feats : 181 selected (from 4849 raw)
+
+── Model Architecture ───────────────────────────────────────────────────
+  MultimodalNet (late-fusion DL head)
+    MRI encoder  : Linear(138→32) → BN → ReLU → Dropout
+    Gene encoder : Linear(181→32) → BN → ReLU → Dropout
+    Classifier   : Linear(64→32) → BN → ReLU → Dropout → Linear(32→2)
+    Total params : 12,610  (all trainable)
+
+── Theoretical FLOPs (per forward pass, batch=16) ────────────────────────
+    MRI encoder    : 0.1413 MFLOPs
+    Gene encoder   : 0.1853 MFLOPs
+    Classifier     : 0.0676 MFLOPs
+    Total DL       : 0.3942 MFLOPs
+
+── SVM Complexity ───────────────────────────────────────────────────────
+    Linear SVM : O(n^1.5 × d)  ≈ 0.7M ops
+    RBF SVM    : O(n² × d)     ≈ 1.7M ops
+    Support vectors — Linear SVM : 69
+    Support vectors — RBF SVM    : 73
+    Embedding dim (RBF input)    : 64
+
+── Wall-Clock Time (avg ± std, 3 reps, one fold) ───────────────────────────
+    Preprocessing + scaling        : 0.012 ± 0.001 s
+    Gene selection                 : 3.454 ± 0.094 s
+    DL training (GPU)              : 3.742 ± 0.299 s
+    Branch A — Linear SVM          : 0.012 ± 0.000 s
+    Branch B — RBF SVM             : 0.007 ± 0.000 s
+────────────────────────────────────────────────────────────────────────
+    Total per fold               : 7.2 s  (0.12 min)
+    Full 10×5 CV (50 folds)      : 6.0 min
+    All 3 binary tasks           : 18.1 min  (0.30 h)
+
+── Memory Consumption ───────────────────────────────────────────────────
+    DL model GPU peak            : 18.3 MB
+    DL model CPU delta           : 0.0 MB
+    System RAM at profiling time : 2413 MB  (of 755 GB)
+
+── GPU vs CPU ───────────────────────────────────────────────────────────
+    DL training uses GPU         : YES
+    SVM training uses GPU        : NO  (scikit-learn CPU-only; n=164 too small)
+    Bottleneck                   : Gene selection (Wilcoxon p-values across 4849 genes)
+========================================================================
