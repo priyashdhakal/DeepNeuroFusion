@@ -3,7 +3,8 @@
 <p align="center">
   <img src="results/figures/exploratory_data_analysis/deepneurofusion_GA1.png" alt="DeepNeuroFusion framework overview" width="100%">
 </p>
-DeepNeuroFusion fuses structural MRI (with age and APOE-ε4 dosage) and whole-blood gene expression into a shared 64-dimensional latent space, then combines a linear SVM, an RBF-SVM on the learned embedding, and a deep MLP head through task-specific weighted probability fusion. All preprocessing, gene selection, and training are recomputed inside each fold (fold-safe) under repeated 10 × 5 stratified cross-validation. Evaluated on the [ANMerge](https://www.synapse.org/#!Synapse:syn22252881) cohort for three tasks: **AD vs. CN**, **AD vs. MCI**, **MCI vs. CN**.
+DeepNeuroFusion fuses structural MRI (with age and APOE-ε4 dosage) and whole-blood gene expression into a shared 64-dimensional latent space, then combines a linear SVM, an RBF-SVM on the learned embedding, and a deep MLP head through task-specific weighted probability fusion. All preprocessing, gene selection, and training are recomputed inside each fold (fold-safe) under repeated 10 × 5 stratified cross-validation. Evaluated on the [ANMerge](https://www.synapse.org/#!Synapse:syn22252881) cohort for three tasks: **AD vs. CN**, **AD vs. MCI**, **MCI vs. CN**
+
 ## Installation
 
 Requires Python 3.10 (GPU optional).
@@ -36,4 +37,4 @@ Outputs are written to `results/` (`figures/`, `tables/`, `profile/`). Per-task 
 
 ## Acknowledgements
 
-We thank the ANMerge and AddNeuroMed consortium for making the harmonised multimodal dataset publicly available. AddNeuroMed and InnoMed were funded by the European Commission. The views expressed here are those of the authors and do not necessarily reflect those of the data providers.
+We thank the **ANMerge** and **AddNeuroMed** consortium for making the harmonised multimodal dataset publicly available. AddNeuroMed and InnoMed were funded by the European Commission. The views expressed here are those of the authors and do not necessarily reflect those of the data providers.
